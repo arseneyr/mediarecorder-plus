@@ -1,14 +1,28 @@
 {
   "name": "mediarecorder-plus",
   "version": "0.4.0",
-  "main": "index.js",
+  "main": "dist/worklet.js",
   "license": "MIT",
+  "types": "dist/index.d.ts",
   "devDependencies": {
+    "@rollup/plugin-legacy": "^2.0.0",
+    "@rollup/plugin-typescript": "^4.1.2",
+    "@types/emscripten": "^1.39.4",
     "clang-format": "^1.4.0",
-    "cross-env": "^7.0.2"
+    "cross-env": "^7.0.2",
+    "dts-bundle-generator": "^4.3.0",
+    "rollup": "^2.10.5",
+    "tslib": "^2.0.0",
+    "typescript": "^3.9.3"
+  },
+  "dependencies": {
+    "@types/dom-mediacapture-record": "^1.0.6"
   },
   "scripts": {
-    "build": "cross-env docker run --rm -it -v %cd%:/src -w /src/encoders trzeci/emscripten make",
+    "build:encoders": "cross-env docker run --rm -it -v %cd%:/src -w /src/encoders trzeci/emscripten make",
+    "build:js": "rollup -c",
+    "build:types": "dts-bundle-generator -o dist/index.d.ts src/index.ts",
+    "build": "npm run build:encoders && npm run build:js && npm run build:types",
     "clean": "cross-env docker run --rm -it -v %cd%:/src -w /src/encoders trzeci/emscripten make clean"
   }
 }

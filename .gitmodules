@@ -1,3 +1,4 @@
 [submodule "encoders/lame/lame-src"]
 	path = encoders/lame/lame-src
 	url = https://github.com/arseneyr/lame
+	ignore = all

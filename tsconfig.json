@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
-    "checkJs": false
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "encoders/*": ["encoders/dist/*"]
+    },
+    "target": "ES2019"
   },
   "exclude": ["dist/**/*"]
 }

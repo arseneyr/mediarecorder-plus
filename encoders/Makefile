@@ -3,7 +3,7 @@ all: lame.wasm
 lame/lame-src/dist/lib/libmp3lame.so:
 	cd lame/lame-src && \
 	git reset --hard && \
-	emconfigure ./configure \
+	emconfigure ./configure -C \
 		CFLAGS="-DNDEBUG -Oz -flto" \
 		--prefix="$$(pwd)/dist" \
 		--host=x86-none-linux \
@@ -25,6 +25,7 @@ lame.wasm: lame/lame-src/dist/lib/libmp3lame.so lame/lame_enc.c
 		-s MALLOC=emmalloc \
 		-s MINIMAL_RUNTIME \
 		-s MODULARIZE \
+		-s EXPORT_ES6 \
 		-s "EXPORTED_FUNCTIONS=['_mrp_init']" \
 		-s ENVIRONMENT="worker,web" \
 		-o dist/lame.js
