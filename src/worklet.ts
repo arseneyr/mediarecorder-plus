@@ -19,7 +19,7 @@ interface IAudioWorkletProcessorOptions<T> {
 }
 
 export interface IProcessorOptions {
-  wasmModule: WebAssembly.Module;
+  wasmBuffer: ArrayBuffer;
   channelCount: number;
 }
 
@@ -28,15 +28,32 @@ export type MrpMessage = "ready";
 class MrpWorkletProcessor extends AudioWorkletProcessor {
   private readonly channelCount: number;
   private readonly encoder: Encoder;
+  private done = false;
 
   constructor(options: IAudioWorkletProcessorOptions<IProcessorOptions>) {
     super();
+    this.port.onmessage = this.onMessage;
     this.channelCount = options.processorOptions.channelCount;
-    this.encoder = new Encoder(options.processorOptions.wasmModule);
+    this.encoder = new Encoder(options.processorOptions.wasmBuffer);
     this.encoder.init().then(() => this.port.postMessage("ready"));
   }
 
+  private onMessage = (ev: MessageEvent) => {
+    if (this.done) {
+      return;
+    }
+    if (ev.data === "stop") {
+      this.done = true;
+      const out = this.encoder.flush();
+      this.port.postMessage(out.buffer, [out.buffer]);
+    }
+  };
+
   process(inputs: Float32Array[][], outputs: Float32Array[][]) {
+    if (this.done) {
+      return false;
+    }
+    this.encoder.encode(inputs[0]);
     return true;
   }
 }

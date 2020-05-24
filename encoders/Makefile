@@ -20,13 +20,13 @@ lame/lame-src/dist/lib/libmp3lame.so:
 lame.wasm: lame/lame-src/dist/lib/libmp3lame.so lame/lame_enc.c
 	@mkdir -p dist
 	emcc $^ \
-	  -DNDEBUG -O0 -Ilame/lame-src/dist/include \
-		-s NO_WASM_ASYNC_COMPILATION \
+	  -DNDEBUG -Oz -Ilame/lame-src/dist/include \
+		--pre-js pre-js.js \
 		-s MALLOC=emmalloc \
 		-s MINIMAL_RUNTIME \
 		-s MODULARIZE \
 		-s EXPORT_ES6 \
-		-s "EXPORTED_FUNCTIONS=['_mrp_init']" \
+		-s "EXPORTED_FUNCTIONS=['_mrp_init','_mrp_free','_mrp_encode','_mrp_flush']" \
 		-s ENVIRONMENT="worker,web" \
 		-o dist/lame.js
 

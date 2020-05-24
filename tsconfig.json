@@ -7,5 +7,6 @@
     },
     "target": "ES2019"
   },
-  "exclude": ["dist/**/*"]
+  // "exclude": ["dist/**/*"]
+  "include": ["src/**/*"]
 }

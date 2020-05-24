@@ -10,7 +10,7 @@ function intArrayFromBase64(s: string) {
     throw new Error("Converting base64 string to bytes failed.");
   }
 }
-function parseDataUrl(url: string) {
+export function parseDataUrl(url: string) {
   const parts = url.split(",");
   if (
     parts.length !== 2 ||

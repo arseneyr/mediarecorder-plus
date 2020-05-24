@@ -1,0 +1,6 @@
+interface:
+
+  new MediaRecorder({
+    wasmUrl: <url or dataurl or null>,
+    workletUrl
+  })
